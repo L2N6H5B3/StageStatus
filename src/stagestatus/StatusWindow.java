@@ -119,7 +119,6 @@ public class StatusWindow {
 		client.add(clientName);
 		// Add Client Status to Client Panel
 	    client.add(clientStatus);
-	    client.setBorder(BorderFactory.createLineBorder(Color.black));
 	    
 	    // Add the Client to the Hashtable
 	    clients.put(clientName, clientStatus);

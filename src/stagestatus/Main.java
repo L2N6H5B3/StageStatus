@@ -20,6 +20,8 @@ public class Main {
 	static WebsocketServer wss;
 	
 	public static void main(String[] args) throws ParseException, IOException {
+		// Hide the Java Icon in the Mac Dock
+		System.setProperty("apple.awt.UIElement", "true");
 		// Creates a new PropertyReader for storing and retrieving settings
 		props = new PropertiesReader();
 		// Creates a new SettingsWindow for editing settings
@@ -32,6 +34,7 @@ public class Main {
 		wss = new WebsocketServer(props.getProperty("comm-port"));
 		// Start the WebSocketServer
 		wss.start();
+		
 	}
 	
 	
