@@ -1,2 +1,2 @@
-# Elvanto-Check-in-Interface
-A Java / Javascript application to allow for customisations to the Elvanto Check-in system.
+# StageStatus
+A Java-based application for confirming ProWebStage Client Connectivity
