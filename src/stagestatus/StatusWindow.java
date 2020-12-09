@@ -1,8 +1,6 @@
 package stagestatus;
 
 
-
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -27,11 +25,14 @@ import javax.swing.border.Border;
 
 public class StatusWindow {
 
-	// Initializes Status window
+	// Initializes Status Window
 	static JFrame statusWindow;
 	
-	// Initializes Status panel
+	// Initializes Status Panel
 	static JPanel contentPanel;
+	
+	// Initializes Status Label
+	static JLabel empty;
 
 	// Initializes ImageIcons
 	static ImageIcon connected, disconnected;
@@ -41,29 +42,35 @@ public class StatusWindow {
 	
 	public StatusWindow() {
 	
-		// Creates a new JFrame for holding standard JPanel component
+		// Create a new JFrame for holding standard JPanel component
 		statusWindow = new JFrame("Stage Connections");
 		statusWindow.setMinimumSize(new Dimension(200, 0));
 		
-		// Creates a new JPanel for holding standard Label and Field components
+		// Create a new JPanel for holding standard Label and Field components
 		contentPanel = new JPanel();
 		contentPanel.setLayout(new GridLayout(0, 1));
 
-		// Sets border
+		// Set border
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		contentPanel.setBorder(padding);
+		
+		// Set Status Label
+		empty = new JLabel("No connections yet...");
 		
 		// Set Image Icons
 		connected = createImageIcon("img/connected.png");
 		disconnected = createImageIcon("img/disconnected.png");
 		
-		// Creates the client hashtable object
+		// Create the client hashtable object
 		clients = new Hashtable<JLabel, JLabel>();
 
-	    // Assigns Panels to the Window Frames
+		// Assign Label to Panel
+		contentPanel.add(empty);
+		
+	    // Assign Panel to Window Frame
 	    statusWindow.setContentPane(contentPanel);
 	    
-	    // Finalizes Window Frame items
+	    // Finalize Window Frame items
 	    statusWindow.pack();
 	}
 	
@@ -122,6 +129,9 @@ public class StatusWindow {
 	    
 	    // Add the Client to the Hashtable
 	    clients.put(clientName, clientStatus);
+	    
+	    // Remove the Empty Label
+	    contentPanel.remove(empty);
 	    
 	    // If there is more than 1 client
 	    if (clients.size() > 1) {

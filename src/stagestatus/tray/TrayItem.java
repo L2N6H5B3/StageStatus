@@ -75,7 +75,7 @@ public class TrayItem {
         }
         final PopupMenu popup = new PopupMenu();
         final TrayIcon trayIcon =
-                new TrayIcon(createImage("images/icon-full.png", "tray icon"));
+                new TrayIcon(createImage("images/stage.png", "tray icon"));
         final SystemTray tray = SystemTray.getSystemTray();
          
         // Create a popup menu components
@@ -118,12 +118,8 @@ public class TrayItem {
         aboutItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	JOptionPane.showMessageDialog(null,
-            			"StageStatus"
-	    					+ "\n"
-							+ "Developed by Luke Bradtke"
-	                		+ "\n"
-	                		+ "\n"
-	        				+ "StageStatus - monitor your ProWebStage clients connectivity"
+        				"StageStatus - monitor ProWebStage client connectivity"
+	        				+ "\n"
 	        				+ "\n"
 	        				+ "© 2020 Luke Bradtke, All Rights Reserved", "About StageStatus", JOptionPane.PLAIN_MESSAGE);
             }
@@ -137,7 +133,6 @@ public class TrayItem {
                  
         exitItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Main.props.saveProperties();
             	tray.remove(trayIcon);
                 System.exit(0);
             }
