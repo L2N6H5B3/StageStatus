@@ -38,7 +38,7 @@ public class PropertiesReader {
 		 
 		try {
 		    FileWriter writer = new FileWriter(configFile);
-		    props.store(writer, "Drive2Pro V1.0 Configuration");
+		    props.store(writer, "StageStatus V1.0 Configuration");
 		    writer.close();
 		} catch (FileNotFoundException ex) {
 			System.out.println("File Not Found... Please try again later.");

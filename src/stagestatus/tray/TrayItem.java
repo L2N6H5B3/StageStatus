@@ -79,7 +79,7 @@ public class TrayItem {
         final SystemTray tray = SystemTray.getSystemTray();
          
         // Create a popup menu components
-        MenuItem connectionsItem = new MenuItem("Connections");
+        MenuItem connectionsItem = new MenuItem("Stage Connections");
         MenuItem aboutItem = new MenuItem("About");
         MenuItem settingsItem = new MenuItem("Settings");
         MenuItem exitItem = new MenuItem("Exit");
@@ -88,7 +88,7 @@ public class TrayItem {
         popup.add(connectionsItem);
         popup.addSeparator();
         popup.add(aboutItem);
-        popup.add(settingsItem);
+//        popup.add(settingsItem);
         popup.addSeparator();
         popup.add(exitItem);
          
@@ -120,10 +120,10 @@ public class TrayItem {
             	JOptionPane.showMessageDialog(null,
             			"StageStatus"
 	    					+ "\n"
-							+ "Developed by Luke Bradtke :)"
+							+ "Developed by Luke Bradtke"
 	                		+ "\n"
 	                		+ "\n"
-	        				+ "StageStatus"
+	        				+ "StageStatus - monitor your ProWebStage clients connectivity"
 	        				+ "\n"
 	        				+ "© 2020 Luke Bradtke, All Rights Reserved", "About StageStatus", JOptionPane.PLAIN_MESSAGE);
             }
