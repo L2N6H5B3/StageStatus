@@ -175,6 +175,20 @@ public class StatusWindow {
 	    statusWindow.pack();
 	}
 	
+	public boolean allConnected() {
+		boolean allConnected = true;
+		
+		// Iterate through each current client
+        for(JLabel key: clients.keySet()){
+        	// If the client is disconnected
+        	if (clients.get(key).getText().equals("Disconnected")) {
+        		// Report client disconnected
+        		allConnected = false;
+			}
+        }
+		return allConnected;
+	}
+	
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	protected ImageIcon createImageIcon(String path) {
 	    java.net.URL imgURL = getClass().getResource(path);

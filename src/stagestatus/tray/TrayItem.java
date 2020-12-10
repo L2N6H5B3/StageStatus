@@ -41,6 +41,11 @@ import javax.swing.*;
 import stagestatus.Main;
  
 public class TrayItem {
+	
+	static TrayIcon trayIcon;
+	
+	static Image normal, connected, disconnected;
+	
     public TrayItem() {
     	
         /* Use an appropriate Look and Feel */
@@ -74,8 +79,13 @@ public class TrayItem {
             return;
         }
         final PopupMenu popup = new PopupMenu();
-        final TrayIcon trayIcon =
-                new TrayIcon(createImage("images/stage.png", "tray icon"));
+        
+        normal = createImage("images/stage.png", "StageStatus");
+        connected = createImage("images/stage-connected.png", "StageStatus Connected");
+        disconnected = createImage("images/stage-disconnected.png", "StageStatus Disconnected");
+        
+        trayIcon = new TrayIcon(normal);
+        
         final SystemTray tray = SystemTray.getSystemTray();
          
         // Create a popup menu components
@@ -96,7 +106,7 @@ public class TrayItem {
          
         try {
             tray.add(trayIcon);
-            trayIcon.setToolTip("StageStatus");
+            trayIcon.setToolTip("StageStatus - Monitor ProWebStage Connections");
             trayIcon.setImageAutoSize(true);
         } catch (AWTException e) {
             System.out.println("TrayIcon could not be added.");
@@ -118,7 +128,7 @@ public class TrayItem {
         aboutItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	JOptionPane.showMessageDialog(null,
-        				"StageStatus - monitor ProWebStage client connectivity"
+        				"StageStatus - Monitor ProWebStage Connections"
 	        				+ "\n"
 	        				+ "\n"
 	        				+ "© 2020 Luke Bradtke, All Rights Reserved", "About StageStatus", JOptionPane.PLAIN_MESSAGE);
@@ -137,6 +147,17 @@ public class TrayItem {
                 System.exit(0);
             }
         });
+    }
+    
+    public void setTrayIconStatus(int status) {
+    	switch(status) {
+    	case 1:
+    		trayIcon.setImage(connected);
+    		break;
+    	case 2:
+    		trayIcon.setImage(disconnected);
+    		break;
+    	}
     }
      
     protected static Image createImage(String path, String description) {

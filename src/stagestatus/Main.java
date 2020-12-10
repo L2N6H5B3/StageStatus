@@ -17,6 +17,7 @@ public class Main {
 	public static PropertiesReader props;
 	public static SettingsWindow settings;
 	public static StatusWindow status;
+	static TrayItem tray;
 	static WebsocketServer wss;
 	
 	public static void main(String[] args) throws ParseException, IOException {
@@ -29,7 +30,7 @@ public class Main {
 		// Creates a new StatusWindow for viewing connections
 		status = new StatusWindow();
 		// Creates a new TrayItem for access to About, Settings, and Program Control
-		new TrayItem();
+		tray = new TrayItem();
 		// Creates a new WebSocketServer
 		wss = new WebsocketServer(props.getProperty("comm-port"));
 		// Start the WebSocketServer
@@ -63,6 +64,11 @@ public class Main {
 					status.updateClient(device, 3);
 					break;
 			}
+		}
+		if (status.allConnected()) {
+			tray.setTrayIconStatus(1);
+		} else {
+			tray.setTrayIconStatus(2);
 		}
 	}
 }
