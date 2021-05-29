@@ -4,10 +4,13 @@ package stagestatus;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,10 +32,13 @@ public class StatusWindow {
 	static JFrame statusWindow;
 	
 	// Initializes Status Panel
-	static JPanel contentPanel;
+	static JPanel contentPanel, clearPanel;
 	
 	// Initializes Status Label
 	static JLabel empty;
+	
+	// Initializes Status Button
+	static JButton clear;
 
 	// Initializes ImageIcons
 	static ImageIcon connected, disconnected;
@@ -44,19 +50,34 @@ public class StatusWindow {
 	
 		// Create a new JFrame for holding standard JPanel component
 		statusWindow = new JFrame("Stage Connections");
-		statusWindow.setMinimumSize(new Dimension(200, 0));
+		statusWindow.setMinimumSize(new Dimension(300, 150));
 		
 		// Create a new JPanel for holding standard Label and Field components
 		contentPanel = new JPanel();
 		contentPanel.setLayout(new GridLayout(0, 1));
+		
+		// Create a new JPanel for holding Clear Button
+		clearPanel = new JPanel();
+		clearPanel.setLayout(new GridLayout(0, 1));
 
 		// Set border
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		contentPanel.setBorder(padding);
 		
 		// Set Status Label
-		empty = new JLabel("No connections yet...");
+		empty = new JLabel("No available connections...");
 		
+		// Add Status clear Button
+	    clear = new JButton("Clear Stale Connections");
+	    clear.addActionListener((ActionEvent event) -> {
+	    	clearClients();
+        });
+	    
+	    // Add a Separator
+	    clearPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+	 	// Assign Button to Panel
+		clearPanel.add(clear);
+	    
 		// Set Image Icons
 		connected = createImageIcon("img/connected.png");
 		disconnected = createImageIcon("img/disconnected.png");
@@ -66,6 +87,9 @@ public class StatusWindow {
 
 		// Assign Label to Panel
 		contentPanel.add(empty);
+
+		// Assign ClearPanel to Panel
+		contentPanel.add(clearPanel);
 		
 	    // Assign Panel to Window Frame
 	    statusWindow.setContentPane(contentPanel);
@@ -79,13 +103,14 @@ public class StatusWindow {
 
 	    // Shows Status Frame
 	    statusWindow.setVisible(true);
+	    statusWindow.setAlwaysOnTop(true);
 	}
 	
 	public boolean clientExists(String device) {
 		boolean foundClient = false;
 		
 		// Iterate through each current client
-        for(JLabel key: clients.keySet()){
+        for(JLabel key: clients.keySet()) {
         	// If the JLabel Text is the same as the IP
         	if (device.equals(key.getText())) {
         		// Report client exists
@@ -130,18 +155,22 @@ public class StatusWindow {
 	    // Add the Client to the Hashtable
 	    clients.put(clientName, clientStatus);
 	    
-	    // Remove the Empty Label
-	    contentPanel.remove(empty);
-	    
-	    // If there is more than 1 client
-	    if (clients.size() > 1) {
-	    	// Add a Separator
-		    contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+	    // If the Empty Label is displayed
+	    if (empty.getParent() == contentPanel) {
+		    // Remove the Empty Label
+		    contentPanel.remove(empty);
 	    }
 	    
 	    // Add Client to the Status Window Panel
 	    contentPanel.add(client);
+	    
+	    // Remove ClearPanel from Panel
+	    contentPanel.remove(clearPanel);
+	    // Assign ClearPanel to Panel
+	    contentPanel.add(clearPanel);
 			    
+	    // Repaint the Window
+    	statusWindow.repaint();
 		// Finalizes Window Frame items
 	    statusWindow.pack();
 	}
@@ -149,8 +178,8 @@ public class StatusWindow {
 	public void updateClient(String device, int status) {
 		
 		// Iterate through each current client
-		clients.forEach((ipLabel, statusLabel) -> {
-			if (device.equals(ipLabel.getText())) {
+		clients.forEach((nameLabel, statusLabel) -> {
+			if (device.equals(nameLabel.getText())) {
 				JLabel clientStatus = statusLabel;
 				
 				// Connected to Server & Connected to ProPresenter
@@ -170,7 +199,9 @@ public class StatusWindow {
 				}
 			}
         });
-
+		
+		// Repaint the Window
+    	statusWindow.repaint();
 		// Finalizes Window Frame items
 	    statusWindow.pack();
 	}
@@ -179,14 +210,57 @@ public class StatusWindow {
 		boolean allConnected = true;
 		
 		// Iterate through each current client
-        for(JLabel key: clients.keySet()){
+        for(JLabel key: clients.keySet()) {
         	// If the client is disconnected
-        	if (clients.get(key).getText().equals("Disconnected")) {
+        	if (clients.get(key).getText().equals("Disconnected") || clients.get(key).getText().equals("Unknown")) {
         		// Report client disconnected
         		allConnected = false;
 			}
         }
 		return allConnected;
+	}
+	
+	private void clearClients() {
+		
+		ArrayList<JLabel> clearClients = new ArrayList<JLabel>();
+		
+		// Iterate through each current client
+        for(JLabel key: clients.keySet()) {
+        	System.out.println("Client: "+key.getText());
+        	// If the client is unknown
+        	if (clients.get(key).getText().equals("Unknown")) {
+        		System.out.println("Client: "+key.getText()+" Is Unknown, adding to remove.");
+        		// Add the client to the list to remove
+        		clearClients.add(key);
+			}
+        }
+        
+        // Iterate through each client to clear
+        for(JLabel client: clearClients) {
+        	System.out.println("Client: "+client.getText()+" is being removed.");
+        	// Remove the client from the panel
+        	contentPanel.remove(client.getParent());
+        	// Remove the client from the current client list
+        	clients.remove(client);
+        }
+		
+        // If there are no clients
+	    if (clients.size() == 0) {
+	    	// Remove ClearPanel from Panel
+			contentPanel.remove(clearPanel);
+	    	// Assign Label to Panel
+			contentPanel.add(empty);
+			// Assign ClearPanel to Panel
+			contentPanel.add(clearPanel);
+			// Set Tray Icon
+		    Main.tray.setTrayIconStatus(3);
+	    }
+        
+    	// Repaint the Window
+    	statusWindow.repaint();
+		// Finalizes Window Frame items
+	    statusWindow.pack();
+	    
 	}
 	
 	/** Returns an ImageIcon, or null if the path was invalid. */

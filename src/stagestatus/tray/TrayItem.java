@@ -131,6 +131,9 @@ public class TrayItem {
         				"StageStatus - Monitor ProWebStage Connections"
 	        				+ "\n"
 	        				+ "\n"
+							+ "Server "+Main.wss.ServerStatus()+", listening on port "+Main.props.getProperty("comm-port")
+	        				+ "\n"
+	        				+ "\n"
 	        				+ "© 2020 Luke Bradtke, All Rights Reserved", "About StageStatus", JOptionPane.PLAIN_MESSAGE);
             }
         });
@@ -156,6 +159,9 @@ public class TrayItem {
     		break;
     	case 2:
     		trayIcon.setImage(disconnected);
+    		break;
+    	case 3:
+    		trayIcon.setImage(normal);
     		break;
     	}
     }

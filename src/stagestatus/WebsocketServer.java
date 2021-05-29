@@ -21,11 +21,13 @@ public class WebsocketServer extends WebSocketServer {
 
     private Set<WebSocket> conns;
     private Hashtable<WebSocket, String> connNames;
+    private String serverStatus = "Stopped";
 
     public WebsocketServer(String port) {
         super(new InetSocketAddress(Integer.parseInt(port)));
         conns = new HashSet<>();
         connNames = new Hashtable<WebSocket, String>();
+        serverStatus = "Starting";
     }
 
     @Override
@@ -38,13 +40,11 @@ public class WebsocketServer extends WebSocketServer {
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         conns.remove(conn);
         Main.createClient(connNames.get(conn), "SocketDisconnected");
-        System.out.println("Closed");
+        serverStatus = "Stopped";
     }
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-    	
-    	System.out.println(message);
     	
     	// Splits incoming message into array of Strings
     	String messageData[] = message.split(":");
@@ -80,13 +80,18 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
-    	System.out.println("Socket Error");
         if (conn != null) {
             conns.remove(conn);
         }
+        serverStatus = "Error";
     }
 
 	@Override
 	public void onStart() {
+		serverStatus = "Running";
+	}
+	
+	public String ServerStatus() {
+		return serverStatus;
 	}
 }

@@ -109,5 +109,6 @@ public class SettingsWindow {
 	    
 	    // Shows Settings Frame
 	    standardSettingWindow.setVisible(true);
+	    standardSettingWindow.setAlwaysOnTop(true);
 	}
 }

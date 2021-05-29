@@ -17,8 +17,8 @@ public class Main {
 	public static PropertiesReader props;
 	public static SettingsWindow settings;
 	public static StatusWindow status;
-	static TrayItem tray;
-	static WebsocketServer wss;
+	public static TrayItem tray;
+	public static WebsocketServer wss;
 	
 	public static void main(String[] args) throws ParseException, IOException {
 		// Hide the Java Icon in the Mac Dock
